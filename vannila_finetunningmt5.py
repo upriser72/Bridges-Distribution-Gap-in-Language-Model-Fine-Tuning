@@ -158,8 +158,8 @@ from huggingface_hub import notebook_login
 
 notebook_login()
 
-model.push_to_hub("suryakantmani/mt5-health-finetuned-Patient-Query")
-tokenizer.push_to_hub("suryakantmani/mt5-health-finetuned-Patient-Query")
+model.push_to_hub("suryakantmani/mt5-finetuned-health")
+tokenizer.push_to_hub("suryakantmani/mt5-finetuned-health")
 
 print("🚀 Model uploaded to Hugging Face Hub successfully!")
 
