@@ -94,7 +94,7 @@ import torch
 from transformers import Seq2SeqTrainingArguments
 
 training_args = Seq2SeqTrainingArguments(
-    output_dir="./mt5_vanila_finetune_patient_Query", # Directory to save checkpoints
+    output_dir="mt5-finetuned-health", # Directory to save checkpoints
     num_train_epochs=3,                   # Number of training epochs
     per_device_train_batch_size=8,        # Batch size per device during training
     per_device_eval_batch_size=8,         # Batch size for evaluation
