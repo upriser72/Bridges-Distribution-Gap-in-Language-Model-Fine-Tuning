@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Vannila_FinetunningMT5.ipynb
-    https://colab.research.google.com/drive/10ZZLQpZd3EhJMSQ5n0KklkIUmNsLxXIO
-"""
+
 
 !pip install transformers datasets pandas scikit-learn
 
@@ -14,7 +11,7 @@ df = df.rename(columns={'input': 'text', 'output': 'labels'})
 
 df.head(3)
 
-# 1. Fill NaN values with an empty string to prevent type errors.
+# 1. Fill NaN values with an empty string .
 df['text'] = df['text'].fillna('')
 df['labels'] = df['labels'].fillna('')
 
@@ -36,17 +33,17 @@ raw_datasets = DatasetDict({
 
 from transformers import AutoTokenizer
 
-# Choose your MT5 model (e.g., mt5-small)
-model_checkpoint = "google/mt5-small"
+# Choose your MT5 model 
+model_checkpoint = "google/mt5-base"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 
-# Define max lengths (adjust based on your data)
+# Define max lengths 
+#Max length is selected based on data sets
 max_input_length = 128
 max_target_length = 64
 
 def preprocess_function(examples):
-    # --- 1. Tokenize Input (Source) ---
-    # Add the task prefix to the input text
+    
     inputs = [f"process: {ex}" for ex in examples["text"]]
 
     # Tokenize the input texts
@@ -56,11 +53,7 @@ def preprocess_function(examples):
         truncation=True
     )
 
-    # --- 2. Tokenize Output (Labels/Target) ---
-    # NOTE: For tokenizing the target text in a sequence-to-sequence model
-    # using the Hugging Face `map` function (which handles the batching),
-    # the recommended and correct approach is to use the `text_target`
-    # argument in a separate tokenizer call.
+    # --- 2. Tokenize Output 
 
     # Use text_target for the output/labels
     labels = tokenizer(
@@ -114,7 +107,7 @@ print("Seq2SeqTrainingArguments defined successfully.")
 
 from transformers import Seq2SeqTrainer
 
-# Optional: Import torch to check for CUDA
+#  Import torch to check for CUDA
 import torch
 
 trainer = Seq2SeqTrainer(
@@ -126,7 +119,7 @@ trainer = Seq2SeqTrainer(
     data_collator=data_collator,
 )
 
-# Start the fine-tuning process
+#  fine-tuning process
 print("Fine Tunning Started")
 trainer.train()
 print("Fine Tunning Completed")
@@ -139,9 +132,9 @@ input_ids = tokenizer(prompt, return_tensors="pt").input_ids.to('cuda:0')
 # 3. Generate the response with controlled parameters
 generated_ids = model.generate(
     input_ids,
-    # Force the model to generate a substantial length
+    #  generate a substantial length
     max_new_tokens=100,
-    # Use beam search to select the most probable long sequence
+    # beam search to select the most probable long sequence
     num_beams=4,
     do_sample=False,
     # Ensure the model knows when to stop
