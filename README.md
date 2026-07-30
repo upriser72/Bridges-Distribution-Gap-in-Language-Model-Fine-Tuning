@@ -238,10 +238,10 @@ versions.
 
 The report credits:
 
-- Karan Shardul - LoRA implementation and GPU optimization
-- Surya Kant Mani - data curation, preprocessing, and vanilla fine-tuning
-- Vanshika Srivastava - LangAnchor design and implementation
-- Kaivalya Vanmali - metrics and multilingual evaluation
+- Surya Kant Mani 
+- Karan Shardul 
+- Vanshika Srivastava 
+- Kaivalya Vanmali 
 
 ## Citation and license
 
