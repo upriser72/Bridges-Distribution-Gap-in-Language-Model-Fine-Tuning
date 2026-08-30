@@ -243,10 +243,4 @@ The report credits:
 - Vanshika Srivastava 
 - Kaivalya Vanmali 
 
-## Citation and license
 
-The repository has no standalone license. The report's classroom-use notice
-does not necessarily license every software and dataset artifact. Confirm the
-licenses of XLSum, healthcare data, checkpoints, and libraries before
-redistribution. For academic use, cite the report and its mT5, XLSum, LoRA, and
-evaluation references.
