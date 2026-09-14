@@ -3,7 +3,7 @@
 > Comparing full fine-tuning, LoRA, and a proposed hidden-state anchoring
 > method for preserving cross-lingual capabilities in mT5.
 
-This student research project studies catastrophic forgetting in multilingual
+This research project studies catastrophic forgetting in multilingual
 sequence-to-sequence models. It fine-tunes an mT5 multilingual summarization
 checkpoint on English-only data, then measures how well the model retains its
 English, Hindi, and Marathi capabilities.
@@ -14,10 +14,6 @@ Three strategies are compared:
 2. **LoRA** adds low-rank trainable adapters to attention projections.
 3. **LangAnchor**, the project's proposed method, regularizes fine-tuned hidden
    states against the pretrained model's representations.
-
-Summarization is a controlled probe for multilingual stability. The full
-methodology and results are in
-[`ML Project Final/Project Report Final.pdf`](ML%20Project%20Final/Project%20Report%20Final.pdf).
 
 ## Reported findings
 
