@@ -34,7 +34,6 @@ Results averaged across English, Hindi, and Marathi in the project report:
 
 | Model | ROUGE-1 | ROUGE-2 | ROUGE-L | BLEU | BERTScore | PPL (lower is better) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| mT5 base | 0.4126 | 0.3676 | 0.4126 | 17.15 | 0.9317 | 3.33 |
 | Vanilla FT | 0.1477 | 0.0808 | 0.1477 | 2.66 | 0.8726 | 11.76 |
 | LoRA | 0.3188 | 0.2604 | 0.3188 | 15.05 | 0.9177 | 2.56 |
 | LangAnchor | 0.2326 | 0.1295 | 0.2326 | 7.28 | 0.9079 | **2.27** |
