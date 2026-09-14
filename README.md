@@ -62,7 +62,7 @@ reduction in representation drift to LangAnchor.
 10,000 English XLSum samples
              |
              v
- mT5-Multilingual-XLSum
+ mT5-Multilingual-XLSum & mT5Base
              |
      +-------+--------+
      |       |        |
