@@ -12,7 +12,6 @@ Three approaches are compared:
 2. **LoRA (Low-Rank Adaptation)** — adds low-rank trainable adapters to attention projections.
 3. **LangAnchor** — the proposed method, which regularizes fine-tuned hidden states against the pretrained model's representations.
 
-
 # Project Overview
 
 Multilingual pretrained models such as mT5 learn shared representations across many languages.
@@ -169,74 +168,48 @@ The model learns to generate the reference summary from the article.
 
 # System Architecture
 
-The complete system consists of a pretrained mT5 model, supervised fine-tuning, three adaptation strategies, and multilingual evaluation.
+The complete system consists of a pretrained mT5 model, supervised fine-tuning, three alternative adaptation strategies, and multilingual evaluation.
 
 ```text
                          ┌──────────────────────────────┐
-                         │         mT5 Model            │
-                         │                              │
+                         │     Pretrained mT5 Model     │
                          └──────────────┬───────────────┘
                                         │
                                         ▼
                          ┌──────────────────────────────┐
-                         │        XLSum Dataset         │
+                         │      English XLSum Data      │
                          │                              │
-                         │   Article → Reference        │
-                         │          Summary             │
+                         │     Article → Summary        │
                          └──────────────┬───────────────┘
                                         │
                                         ▼
                          ┌──────────────────────────────┐
                          │     SentencePiece Tokenizer  │
-                         │                              │
-                         │ Article → Input IDs          │
-                         │ Summary → Labels             │
                          └──────────────┬───────────────┘
                                         │
                                         ▼
-                    ┌─────────────────────────────────────────┐
-                    │          Fine-Tuning Strategies         │
-                    └───────────────┬───────────────┬─────────┘
-                                    │               │
-                     ┌──────────────┘               └──────────────┐
-                     ▼                                             ▼
-          ┌─────────────────────┐                       ┌─────────────────────┐
-          │ Vanilla Fine-Tuning │                       │        LoRA          │
-          │                     │                       │                     │
-          │ Update all model    │                       │ Train low-rank      │
-          │ parameters          │                       │ adapter parameters  │
-          └──────────┬──────────┘                       └──────────┬──────────┘
-                     │                                             │
-                     └──────────────────┬──────────────────────────┘
+             ┌──────────────────────────┼──────────────────────────┐
+             │                          │                          │
+             ▼                          ▼                          ▼
+   ┌───────────────────┐      ┌───────────────────┐      ┌───────────────────┐
+   │ Vanilla Fine-Tuning│      │       LoRA        │      │     LangAnchor     │
+   │                   │      │                   │      │                   │
+   │ Update ALL        │      │ Frozen mT5        │      │ Fine-tuning       │
+   │ parameters        │      │ + LoRA adapters    │      │ + Anchor loss     │
+   └─────────┬─────────┘      └─────────┬─────────┘      └─────────┬─────────┘
+             │                          │                          │
+             ▼                          ▼                          ▼
+   ┌───────────────────┐      ┌───────────────────┐      ┌───────────────────┐
+   │ Vanilla Model     │      │ LoRA Model        │      │ LangAnchor Model  │
+   └─────────┬─────────┘      └─────────┬─────────┘      └─────────┬─────────┘
+             │                          │                          │
+             └──────────────────────────┼──────────────────────────┘
                                         │
                                         ▼
                          ┌──────────────────────────────┐
-                         │          LangAnchor          │
+                         │        Model Evaluation      │
                          │                              │
-                         │ Base Hidden States           │
-                         │          h_base              │
-                         │             │                │
-                         │             ▼                │
-                         │ Fine-Tuned Hidden States     │
-                         │          h_tuned             │
-                         │             │                │
-                         │             ▼                │
-                         │ Anchor Regularization        │
-                         └──────────────┬───────────────┘
-                                        │
-                                        ▼
-                         ┌──────────────────────────────┐
-                         │          mT5 Decoder         │
-                         └──────────────┬───────────────┘
-                                        │
-                                        ▼
-                              Generated Summary
-                                        │
-                                        ▼
-                         ┌──────────────────────────────┐
-                         │          Evaluation          │
-                         │                              │
-                         │ ROUGE | BLEU | BERTScore    │
+                         │ ROUGE | BLEU | BERTScore     │
                          │ Perplexity | Drift           │
                          └──────────────┬───────────────┘
                                         │
@@ -245,9 +218,11 @@ The complete system consists of a pretrained mT5 model, supervised fine-tuning, 
                          │    Multilingual Evaluation   │
                          │                              │
                          │ English | French | Hindi     │
-                         │ Spanish                     │
+                         │ Spanish                      │
                          └──────────────────────────────┘
 ```
+
+The three fine-tuning approaches are **independent experimental branches** starting from the same pretrained mT5 model. **Vanilla Fine-Tuning is not followed by LoRA, and LoRA is not followed by LangAnchor.**
 
 ---
 
@@ -564,7 +539,7 @@ The following table contains the results obtained from the final multilingual ev
 | **mT5 Base** | **0.4126** | **0.3676** | **0.4126** | **17.1513** | **0.9317** |       3.3336 |     9.06 |
 | Vanilla FT   |     0.1477 |     0.0808 |     0.1477 |      2.6565 |     0.8726 |      11.7661 | **6.98** |
 | LoRA         |     0.3188 |     0.2604 |     0.3188 |     15.0482 |     0.9177 |       2.5572 |     7.96 |
-| LangAnchor   |     0.2326 |     0.1295 |     0.2326 |      7.2771 |     0.9079 |   **2.2652** |     8.98 |
+| LangAnchor   |     0.2326 |     0.1295 |     0.2326 |      7.2771 |     0.9079 |       2.2652 |     8.98 |
 
 ### Metric Interpretation
 
@@ -818,7 +793,6 @@ LangAnchor explicitly adds a hidden-state anchoring objective.
 ```
 
 The reported project results attribute approximately **40% reduction in representation drift** to LangAnchor.
-
 
 # Important Experimental Note
 
