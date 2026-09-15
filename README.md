@@ -1,4 +1,4 @@
-# Preserving Multilingual Geometry During Fine-Tuning
+# Preserving Multilingual Geometry During Fine-Tuning Language models
 
 > Comparing full fine-tuning, LoRA, and a proposed hidden-state anchoring method for preserving cross-lingual capabilities in mT5.
 
